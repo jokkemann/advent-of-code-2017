@@ -9,8 +9,6 @@ function getChecksum(input) {
         let sum2 = 0
         input.forEach((s) => {
                 let numbers = s.split(/\s/).map(num => parseInt(num))
-                console.log(numbers)
-
                 numbers.sort((a, b) => b - a)
 
                 sum += numbers[0] - numbers[numbers.length - 1]
