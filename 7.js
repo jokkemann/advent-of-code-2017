@@ -5,16 +5,10 @@ let file = './inputs/7.txt'
 
 let input = fs.readFileSync(file).toString().split('\n').filter(s => s !== '')
 
-let nodes =[]
+let nodes = input.map(parseNode)
 
-input.forEach(prog => {
-	let node = parseNode(prog)
-	nodes.push(node)
-})
+let allChildren = nodes.reduce((a, b) => a.concat(b.children), [])
 
-let allChildren = nodes.map(a => a.children).reduce((a,b) => {
-	return a.concat(b)
-})
 let root = nodes.filter(n => n.children.length > 0).find(n => !allChildren.includes(n.name))
 console.log('task1', root.name)
 
