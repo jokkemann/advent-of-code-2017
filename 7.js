@@ -21,6 +21,9 @@ console.log('task1', root.name)
 root.children.map(c => parseWeight(nodes.find(n => n.name === c)))
 console.log(root.children)
 
+// since traversing recursively, we will traverse the children before we handle the current node
+// This means that the first time we find an unbalanced node, it will be at the "first" possible
+// node that gives meaning to adjust
 function parseWeight(node) {
 	let children = nodes.filter(n => node.children.includes(n.name))
 	let childrenWeight = children.map(c => {
