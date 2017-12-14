@@ -1,74 +1,77 @@
 const arr = Array(256).fill(0).map((n, i) => i)
-
-const fs = require('fs')
-const input = fs.readFileSync('./inputs/10.txt').toString().trim()
-
 const padding = [17, 31, 73, 47, 23]
 
-const task1 = (arr, input) => {
+const task1 = (input) => {
 	let res = performHashAlgorithm(input.split(',').map(s => parseInt(s)), 0, 0, arr)
 	return res.arr[0] * res.arr[1]
 }
 
-const task2 = (arr, input) => {
-	return createKnotHash(input, arr)
+//console.log(solve(arr))
+
+module.exports = {
+	createKnotHash
 }
 
-console.log({
-	task1: task1(arr, input),
-	task2: task2(arr, input)
-})
+function solve() {
+	const fs = require('fs')
+	const input = fs.readFileSync('./inputs/10.txt').toString().trim()
+
+	return {
+		task1: task1(input),
+		task2: createKnotHash(input)
+	}
+}
 
 function performHashAlgorithm(input, pos, skip, inputArr) {
-	let arr = inputArr.slice()
+	let hashArr = inputArr.slice()
 	input.forEach(length => {
-		arr = pinchTwist(arr, pos, length)
-		if (pos + length + skip > arr.length) {
-			pos = (pos + length + skip) % arr.length
+		hashArr = pinchTwist(hashArr, pos, length)
+		if (pos + length + skip > hashArr.length) {
+			pos = (pos + length + skip) % hashArr.length
 		} else {
 			pos += length + skip
 		}
 		skip++
 
 	})
-	return {arr, pos, skip}
+	return {arr: hashArr, pos, skip}
 }
 
-function createKnotHash(input, inputArr){
-	let arr = inputArr.slice()
+function createKnotHash(input){
+	let hashArr = arr.slice()
 	const lengthSequence = input.split('').map(s => s.charCodeAt(0)).concat(padding)
 	let pos = 0
 	let skip = 0
 
 	for(let i = 0; i < 64; i++) {
-		let res = performHashAlgorithm(lengthSequence, pos, skip, arr)
-		arr = res.arr
+		let res = performHashAlgorithm(lengthSequence, pos, skip, hashArr)
+		hashArr = res.arr
 		pos = res.pos
 		skip = res.skip
 	}
 	let newArr = []
 	for (let i = 0; i < 16; i++) {
-		newArr.push(arr.splice(0, 16).reduce((a,b) => a ^ b))
+		newArr.push(hashArr.splice(0, 16).reduce((a,b) => a ^ b))
 	}
 	return newArr.map(s => toHex(s)).join('')
 }
 
-function pinchTwist(arr, pos, length) {
-	arr = arr.slice()
-	if (pos + length > arr.length) {
-		const positionsToEnd = arr.length - pos
-		let arrToRotate = arr.splice(pos, positionsToEnd).concat(arr.splice(0, length - positionsToEnd)).reverse()
+function pinchTwist(inputArr, pos, length) {
+	hashArr = inputArr.slice()
+	if (pos + length > hashArr.length) {
+		const positionsToEnd = hashArr.length - pos
+		let arrToRotate = hashArr.splice(pos, positionsToEnd).concat(hashArr.splice(0, length - positionsToEnd)).reverse()
 
 		// push the first part of the rotated numbers to the end of the array
-		arr.push(...arrToRotate.splice(0, positionsToEnd))
+		hashArr.push(...arrToRotate.splice(0, positionsToEnd))
 
 		// put the last part of the rotated numbers to the start of the array
-		arr.unshift(...arrToRotate)
+		hashArr.unshift(...arrToRotate)
 	} else {
-		let rotated = arr.slice(pos, length+pos).reverse()
-		arr.splice(pos, length, ...rotated)
+		let rotated = hashArr.slice(pos, length+pos).reverse()
+		hashArr.splice(pos, length, ...rotated)
 	}
-	return arr
+	return hashArr
 }
 
 function toHex(num) {
