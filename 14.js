@@ -1,4 +1,4 @@
-let hasher = require('./10')
+let { createKnotHash } = require('./helpers')
 
 console.log(solve())
 function solve() {
@@ -15,7 +15,7 @@ function solve() {
 function getBinaryGrid(input) {
 	let grid = []
 	for (let i = 0; i < 128; i++) {
-		let hash = hasher.createKnotHash(`${input}-${i}`)
+		let hash = createKnotHash(`${input}-${i}`)
 		let binaryRow = hash.match(/.{1,2}/g).map(part => {
 			// convert hex to binary
 			let num = parseInt(part, 16).toString(2)
