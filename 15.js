@@ -1,7 +1,7 @@
 let fakeA = 65, fakeB = 8921
 let realA = 722, realB = 354
 
-const bitmap = parseInt('1111111111111111', 2)
+const bitmap = 0xFFFF
 const factorA = 16807, factorB = 48271, divisor = 2147483647
 
 console.log(solve())
