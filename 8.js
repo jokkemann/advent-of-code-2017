@@ -7,7 +7,6 @@ const instructions = input.map(s => parseInstruction(s))
 let registers = {}
 instructions.map(i => i.name).forEach(n => registers[n] = 0)
 
-console.log(registers)
 let maxSeen = Number.MIN_VALUE
 instructions.forEach(execute)
 
@@ -21,7 +20,6 @@ console.log(solutions)
 function parseInstruction(s) {
 	let match = s.match(/^(\w+)\s(\w+)\s([-]?\d+)\s\w+\s(\w+)\s([\!\<\>\=]+)\s([-]?\d+)$/)
 
-	if (!match) console.log('s', s)
 	return {
 		name: match[1],
 		instr: match[2],
