@@ -58,17 +58,19 @@ function task2(input) {
         info = info.filter(p => isUnique(p, info))
 
         // Update positions and velocities for the remaining particles
-        info.forEach(p => {
-            p.vel[0] += p.acc[0]
-            p.vel[1] += p.acc[1]
-            p.vel[2] += p.acc[2]
-            p.pos[0] += p.vel[0]
-            p.pos[1] += p.vel[1]
-            p.pos[2] += p.vel[2]
-        })
+        info.forEach(updateParticle)
         i++
     }
     return info.length
+}
+
+function updateParticle(p) {
+    p.vel[0] += p.acc[0]
+    p.vel[1] += p.acc[1]
+    p.vel[2] += p.acc[2]
+    p.pos[0] += p.vel[0]
+    p.pos[1] += p.vel[1]
+    p.pos[2] += p.vel[2]
 }
 
 function isUnique(p, info) {
